@@ -48,9 +48,11 @@ const Profile = () => {
 
                 <h2 style={{ fontSize: '2rem', marginBottom: '10px' }}>{profile.username}</h2>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', color: 'var(--text-muted)', marginBottom: '30px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                        <Mail size={16} /> {profile.email}
-                    </div>
+                    {isOwnProfile && currentUser.email && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <Mail size={16} /> {currentUser.email}
+                        </div>
+                    )}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                         <Calendar size={16} /> Inscrit le {new Date(profile.created_at).toLocaleDateString()}
                     </div>

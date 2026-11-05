@@ -3,8 +3,9 @@ const bcrypt = require('bcryptjs');
 
 exports.getProfile = async (req, res, next) => {
     try {
+        // Public route: the email stays private.
         const [rows] = await pool.query(
-            'SELECT id, username, email, bio, avatar, created_at FROM users WHERE id = ?',
+            'SELECT id, username, bio, avatar, created_at FROM users WHERE id = ?',
             [req.params.id]
         );
         if (rows.length === 0) return res.status(404).json({ message: 'User not found' });

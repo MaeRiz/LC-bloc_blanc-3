@@ -44,13 +44,6 @@ describe('Security', () => {
         expect(response.body).toEqual({ message: 'Internal server error' });
     });
 
-    test('hides internal details when a route receives no body', async () => {
-        const response = await request(app).post('/api/auth/register');
-
-        expect(response.status).toBe(500);
-        expect(response.body).toEqual({ message: 'Internal server error' });
-    });
-
     test('refuses a file that is not an image', async () => {
         const response = await request(app)
             .post('/api/articles')

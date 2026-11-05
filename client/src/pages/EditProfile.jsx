@@ -45,7 +45,8 @@ const EditProfile = () => {
 
             // Update local storage/context with potentially new username/avatar
             const { data: updatedUser } = await API.get(`/users/${user.id}`);
-            login(updatedUser, localStorage.getItem('token'));
+            // The public profile has no email: keep the one from the session.
+            login({ ...user, ...updatedUser }, localStorage.getItem('token'));
 
             navigate(`/profile/${user.id}`);
         } catch (err) {
