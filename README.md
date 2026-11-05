@@ -63,4 +63,4 @@ npm test --prefix client
 
 ## Déploiement
 
-Le fichier `compose.yaml` décrit la production. La procédure est détaillée dans [DEPLOIEMENT.md](DEPLOIEMENT.md).
+Le fichier `compose.yaml` décrit la production.

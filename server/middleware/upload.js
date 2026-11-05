@@ -23,6 +23,7 @@ const upload = multer({
         }
         const error = new Error('Images only!');
         error.status = 400;
+        error.publicMessage = 'Unsupported image format';
         cb(error);
     }
 });

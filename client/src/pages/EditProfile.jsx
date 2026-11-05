@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import { ACCEPTED_IMAGES, getImageError } from '../api/imageErrors';
 import { useAuth } from '../context/AuthContext';
 import { Save, User as UserIcon, Image as ImageIcon } from 'lucide-react';
 
@@ -51,7 +52,7 @@ const EditProfile = () => {
             navigate(`/profile/${user.id}`);
         } catch (err) {
             console.error(err);
-            alert('Erreur lors de la mise à jour du profil');
+            alert(getImageError(err, 'Erreur lors de la mise à jour du profil'));
         } finally {
             setSaving(false);
         }
@@ -96,7 +97,7 @@ const EditProfile = () => {
                                 type="file"
                                 style={{ display: 'none' }}
                                 onChange={(e) => setAvatar(e.target.files[0])}
-                                accept="image/*"
+                                accept={ACCEPTED_IMAGES}
                             />
                         </label>
                         {avatar && <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{avatar.name}</span>}

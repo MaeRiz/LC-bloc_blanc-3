@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import API from '../api/axios';
+import { ACCEPTED_IMAGES, getImageError } from '../api/imageErrors';
 import { Image as ImageIcon, Save } from 'lucide-react';
 
 const EditArticle = () => {
@@ -43,7 +44,7 @@ const EditArticle = () => {
             navigate(`/article/${id}`);
         } catch (err) {
             console.error(err);
-            alert('Erreur lors de la modification de l\'article');
+            alert(getImageError(err, 'Erreur lors de la modification de l\'article'));
         } finally {
             setSaving(false);
         }
@@ -80,7 +81,7 @@ const EditArticle = () => {
                         )}
                         <label className="btn glass" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', width: 'fit-content' }}>
                             <ImageIcon size={18} /> {currentImage ? 'Changer l\'image' : 'Ajouter une image'}
-                            <input type="file" style={{ display: 'none' }} onChange={(e) => setImage(e.target.files[0])} />
+                            <input type="file" style={{ display: 'none' }} onChange={(e) => setImage(e.target.files[0])} accept={ACCEPTED_IMAGES} />
                         </label>
                         {image && <span style={{ marginLeft: '10px' }}>{image.name}</span>}
                     </div>

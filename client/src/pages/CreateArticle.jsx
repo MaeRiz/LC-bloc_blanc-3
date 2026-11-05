@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+import { ACCEPTED_IMAGES, getImageError } from '../api/imageErrors';
 import { Image as ImageIcon, Send } from 'lucide-react';
 
 const CreateArticle = () => {
@@ -25,7 +26,7 @@ const CreateArticle = () => {
             navigate(`/article/${response.data.id}`);
         } catch (err) {
             console.error(err);
-            alert('Erreur lors de la création de l\'article');
+            alert(getImageError(err, 'Erreur lors de la création de l\'article'));
         } finally {
             setLoading(false);
         }
@@ -63,7 +64,7 @@ const CreateArticle = () => {
                                 type="file"
                                 style={{ display: 'none' }}
                                 onChange={(e) => setImage(e.target.files[0])}
-                                accept="image/*"
+                                accept={ACCEPTED_IMAGES}
                             />
                         </label>
                         {image && <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{image.name}</span>}

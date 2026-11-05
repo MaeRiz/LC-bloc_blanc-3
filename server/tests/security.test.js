@@ -55,6 +55,30 @@ describe('Security', () => {
         expect(response.status).toBe(400);
     });
 
+    test('explains why a file format is refused', async () => {
+        const response = await request(app)
+            .post('/api/articles')
+            .set('Authorization', `Bearer ${token}`)
+            .field('title', 'Titre')
+            .field('content', 'Contenu')
+            .attach('image', Buffer.from('GIF89a'), { filename: 'x.gif', contentType: 'image/gif' });
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ message: 'Unsupported image format' });
+    });
+
+    test('explains why a file is too large', async () => {
+        const response = await request(app)
+            .post('/api/articles')
+            .set('Authorization', `Bearer ${token}`)
+            .field('title', 'Titre')
+            .field('content', 'Contenu')
+            .attach('image', Buffer.alloc(5 * 1024 * 1024 + 1), { filename: 'x.png', contentType: 'image/png' });
+
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ message: 'Image too large' });
+    });
+
     test('refuses a body larger than the limit', async () => {
         const response = await request(app)
             .post('/api/auth/login')
