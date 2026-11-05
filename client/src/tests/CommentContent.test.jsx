@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import CommentContent from '../components/CommentContent';
 
 const ALLOWED_TAGS = new Set([
-    'A', 'B', 'BLOCKQUOTE', 'BR', 'CODE', 'DEL', 'DIV', 'EM', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
+    'A', 'B', 'BLOCKQUOTE', 'BR', 'CODE', 'DEL', 'DIV', 'EM', 'SPAN', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6',
     'HR', 'I', 'LI', 'OL', 'P', 'PRE', 'S', 'STRONG', 'U', 'UL',
 ]);
 const ALLOWED_ATTRIBUTES = new Set(['href', 'title', 'target', 'rel', 'class']);
@@ -97,7 +97,7 @@ describe('CommentContent', () => {
             const container = renderContent(content);
 
             expect(container).toHaveTextContent('clic');
-            expect(container.querySelector('a[href]')).toBeNull();
+            expect(container.querySelector('a')).toBeNull();
         });
     });
 

@@ -1,0 +1,53 @@
+# Production stack. server/docker-compose.yml only starts MySQL for development.
+# No port is published: only the web service is reached, through the Coolify proxy.
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?}
+      MYSQL_DATABASE: blog_db
+      MYSQL_USER: blog
+      MYSQL_PASSWORD: ${DB_PASSWORD:?}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build: ./server
+    restart: unless-stopped
+    environment:
+      PORT: 5030
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: blog
+      DB_PASSWORD: ${DB_PASSWORD:?}
+      DB_NAME: blog_db
+      JWT_SECRET: ${JWT_SECRET:?}
+      # Coolify proxy, then nginx
+      TRUST_PROXY: ${TRUST_PROXY:-2}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5030/').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: ./client
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  uploads_data:

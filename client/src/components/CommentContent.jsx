@@ -23,11 +23,16 @@ const commentSchema = {
 const rehypePlugins = [rehypeRaw, [rehypeSanitize, commentSchema]];
 const remarkPlugins = [remarkBreaks];
 
-const CommentLink = ({ href, title, children }) => (
-    <a href={href} title={title} target="_blank" rel="nofollow noopener noreferrer ugc">
-        {children}
-    </a>
-);
+// The filter removes unsafe addresses: the text stays, without looking like a link.
+const CommentLink = ({ href, title, children }) => {
+    if (!href) return <span>{children}</span>;
+
+    return (
+        <a href={href} title={title} target="_blank" rel="nofollow noopener noreferrer ugc">
+            {children}
+        </a>
+    );
+};
 
 const components = { a: CommentLink };
 
