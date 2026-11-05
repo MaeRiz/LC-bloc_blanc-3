@@ -142,12 +142,11 @@ describe('CommentSection', () => {
         expect(await screen.findByRole('alert')).toHaveTextContent('Impossible de charger');
     });
 
-    test('displays HTML as plain text, without interpreting it', async () => {
-        const payload = '<img src=x onerror="alert(1)">';
-        fetchComments.mockResolvedValue([{ ...aliceComment, content: payload }]);
+    test('filters a dangerous comment before displaying it', async () => {
+        fetchComments.mockResolvedValue([{ ...aliceComment, content: 'Bonjour <img src=x onerror="alert(1)">' }]);
         const { container } = renderAs(null);
 
-        expect(await screen.findByText(payload)).toBeInTheDocument();
+        expect(await screen.findByText('Bonjour')).toBeInTheDocument();
         expect(container.querySelector('img')).toBeNull();
     });
 });

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, Edit, Trash2, User } from 'lucide-react';
 import { getCommentError } from '../api/comments';
 import { useAuth } from '../context/AuthContext';
+import CommentContent from './CommentContent';
 import CommentForm from './CommentForm';
 
 const CommentItem = ({ comment, onUpdate, onDelete }) => {
@@ -81,7 +82,7 @@ const CommentItem = ({ comment, onUpdate, onDelete }) => {
                     onCancel={() => setEditing(false)}
                 />
             ) : (
-                <div style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{comment.content}</div>
+                <CommentContent content={comment.content} />
             )}
 
             {error && <div role="alert" style={{ color: '#ef4444', marginTop: '12px' }}>{error}</div>}
