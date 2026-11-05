@@ -1,8 +1,10 @@
+const multer = require('multer');
+
 // Express recognises an error handler by its four parameters.
 const errorHandler = (err, req, res, next) => {
     if (res.headersSent) return next(err);
 
-    const status = err.status || 500;
+    const status = err instanceof multer.MulterError ? 400 : err.status || 500;
 
     if (status >= 500) {
         // Details stay in the server logs: SQL errors reveal the database structure.

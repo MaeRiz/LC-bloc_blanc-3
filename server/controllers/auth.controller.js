@@ -2,7 +2,7 @@ const { pool } = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
@@ -15,11 +15,11 @@ exports.register = async (req, res) => {
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -36,6 +36,6 @@ exports.login = async (req, res) => {
             user: { id: user.id, username: user.username, email: user.email, avatar: user.avatar }
         });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };

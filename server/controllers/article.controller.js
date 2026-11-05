@@ -1,6 +1,6 @@
 const { pool } = require('../config/db');
 
-exports.getAllArticles = async (req, res) => {
+exports.getAllArticles = async (req, res, next) => {
     try {
         const [rows] = await pool.query(`
             SELECT articles.*, users.username, users.avatar 
@@ -10,11 +10,11 @@ exports.getAllArticles = async (req, res) => {
         `);
         res.json(rows);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.getArticleById = async (req, res) => {
+exports.getArticleById = async (req, res, next) => {
     try {
         const [rows] = await pool.query(`
             SELECT articles.*, users.username, users.avatar 
@@ -26,11 +26,11 @@ exports.getArticleById = async (req, res) => {
         if (rows.length === 0) return res.status(404).json({ message: 'Article not found' });
         res.json(rows[0]);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.createArticle = async (req, res) => {
+exports.createArticle = async (req, res, next) => {
     try {
         const { title, content } = req.body;
         const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -42,11 +42,11 @@ exports.createArticle = async (req, res) => {
 
         res.status(201).json({ id: result.insertId, title, content, image });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.updateArticle = async (req, res) => {
+exports.updateArticle = async (req, res, next) => {
     try {
         const { title, content } = req.body;
         const [articles] = await pool.query('SELECT * FROM articles WHERE id = ?', [req.params.id]);
@@ -63,11 +63,11 @@ exports.updateArticle = async (req, res) => {
 
         res.json({ message: 'Article updated successfully' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.deleteArticle = async (req, res) => {
+exports.deleteArticle = async (req, res, next) => {
     try {
         const [articles] = await pool.query('SELECT * FROM articles WHERE id = ?', [req.params.id]);
 
@@ -77,6 +77,6 @@ exports.deleteArticle = async (req, res) => {
         await pool.query('DELETE FROM articles WHERE id = ?', [req.params.id]);
         res.json({ message: 'Article deleted successfully' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };

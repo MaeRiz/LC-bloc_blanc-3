@@ -1,7 +1,7 @@
 const { pool } = require('../config/db');
 const bcrypt = require('bcryptjs');
 
-exports.getProfile = async (req, res) => {
+exports.getProfile = async (req, res, next) => {
     try {
         const [rows] = await pool.query(
             'SELECT id, username, email, bio, avatar, created_at FROM users WHERE id = ?',
@@ -10,11 +10,11 @@ exports.getProfile = async (req, res) => {
         if (rows.length === 0) return res.status(404).json({ message: 'User not found' });
         res.json(rows[0]);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-exports.updateProfile = async (req, res) => {
+exports.updateProfile = async (req, res, next) => {
     try {
         if (parseInt(req.params.id) !== req.userId) {
             return res.status(403).json({ message: 'Not authorized' });
@@ -42,6 +42,6 @@ exports.updateProfile = async (req, res) => {
         await pool.query(query, params);
         res.json({ message: 'Profile updated successfully' });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        next(err);
     }
 };

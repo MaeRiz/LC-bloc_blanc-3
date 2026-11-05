@@ -71,8 +71,9 @@ const initDB = async () => {
             `);
 
 			// SEEDING LOGIC
+			// The demo account has a public password: it must never exist in production.
 			const [users] = await pool.query("SELECT * FROM users LIMIT 1");
-			if (users.length === 0) {
+			if (process.env.NODE_ENV !== "production" && users.length === 0) {
 				console.log("Seeding default user...");
 				const hashedPassword = await bcrypt.hash("password123", 10);
 				const [userResult] = await pool.query(
@@ -99,7 +100,7 @@ const initDB = async () => {
 			// Specific check for protocol connection lost or refused
 			retries--;
 			if (retries === 0) {
-				console.error("Max retries reached. Could not connect to database:", err);
+				throw err;
 			} else {
 				await new Promise((resolve) => setTimeout(resolve, 3000));
 			}
