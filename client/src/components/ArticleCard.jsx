@@ -5,7 +5,7 @@ const ArticleCard = ({ article }) => {
         <div className="glass" style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             {article.image && (
                 <img
-                    src={`http://localhost:5000${article.image}`}
+                    src={article.image}
                     alt={article.title}
                     style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                 />
@@ -19,7 +19,7 @@ const ArticleCard = ({ article }) => {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
                         {article.avatar && (
                             <img
-                                src={`http://localhost:5000${article.avatar}`}
+                                src={article.avatar}
                                 alt={article.username}
                                 style={{ width: '24px', height: '24px', borderRadius: '50%' }}
                             />

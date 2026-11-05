@@ -31,7 +31,7 @@ const Navbar = () => {
                             <Link to={`/profile/${user.id}`} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 {user.avatar ? (
                                     <img
-                                        src={`http://localhost:5000${user.avatar}`}
+                                        src={user.avatar}
                                         alt="avatar"
                                         style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }}
                                     />
