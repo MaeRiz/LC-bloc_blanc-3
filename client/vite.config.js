@@ -14,4 +14,8 @@ export default defineConfig({
       '/uploads': API_TARGET,
     },
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/tests/setup.js',
+  },
 })
